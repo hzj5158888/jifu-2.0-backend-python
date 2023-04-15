@@ -1,6 +1,8 @@
-Flask_Script==2.0.6
-Flask_Migrate==2.5.3
-Flask==1.1.2
-Flask_SQLAlchemy==2.4.4
-Flask_JWT_Extended==3.24.1
-PyJWT==1.7.1
+pymysql
+Flask
+Flask_SQLAlchemy
+Flask_JWT_Extended
+PyJWT
+qiniu
+jinja2==3.0.3
+itsdangerous

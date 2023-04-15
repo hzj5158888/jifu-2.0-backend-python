@@ -4,7 +4,7 @@
 @author   ChenDehua 2020/11/26 10:38
 @note     
 """
-from flask_jwt_extended import get_jwt_claims, create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 from common.api.common_result import R
 from common.models.power_user_info import PowerUserInfo
 from common.models.campus_member import CampusMember

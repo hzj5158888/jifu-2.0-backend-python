@@ -24,7 +24,7 @@ report_api = Blueprint("report", __name__)
 
 
 @report_api.route("/", methods=['POST'], strict_slashes=False)
-@jwt_required
+@jwt_required()
 def insertReport():
     """
     提交报障单
@@ -112,7 +112,7 @@ def insertReport():
 
 
 @report_api.route("/<int:user_id>/infos", methods=['GET'])
-@jwt_required
+@jwt_required()
 def listUserAllReport(user_id):
     """
     分页获取用户保障数据
@@ -146,7 +146,7 @@ def listUserAllReport(user_id):
 
 
 @report_api.route("/<int:report_id>", methods=['GET'])
-@jwt_required
+@jwt_required()
 def getReportDetail(report_id):
     """
     获取保障详情
@@ -176,7 +176,7 @@ def getReportDetail(report_id):
 
 
 @report_api.route("/<int:report_id>/evaluation", methods=['PUT'])
-@jwt_required
+@jwt_required()
 def userEvaluateReport(report_id):
     """
     提交报障评价
@@ -215,7 +215,7 @@ def userEvaluateReport(report_id):
 
 
 @report_api.route("/<int:report_id>/cancel", methods=['PUT'])
-@jwt_required
+@jwt_required()
 def cancelReport(report_id):
     """
     用户撤销报障

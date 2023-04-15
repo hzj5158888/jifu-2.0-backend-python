@@ -5,7 +5,7 @@
 @note     jwt配置 文档地址: https://flask-jwt-extended.readthedocs.io/en/latest
 """
 
-from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, get_jwt_claims
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token
 
 from common.api.common_result import R
 import datetime

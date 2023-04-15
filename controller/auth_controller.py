@@ -6,7 +6,7 @@ import uuid
 
 import requests
 from flask import Blueprint, request
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, jwt_refresh_token_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import json
 from application_initializer import db
 from common.api.common_result import R
@@ -23,27 +23,27 @@ def web_login(username, token, challenge, timestamp):
     info = PowerUserInfo.query.filter_by(account=username).first()
 
     if not info:
-        return R.validateFailedMsg('用户名或者密码错误')
+        return R.validateFailedMsg('用户名或者密码错�?')
 
     pwd = hashlib.sha256((token + "." + username + "." + info.salt).encode()).hexdigest()
 
     if pwd != info.password:
-        return R.validateFailedMsg('用户名或者密码错误')
+        return R.validateFailedMsg('用户名或者密码错�?')
 
     print(str(timestamp),(token + "." + timestamp))
     print(hmac.new(str(timestamp).encode(), (token + "." + timestamp).encode(), 'sha256').hexdigest())
     if hmac.new(str(timestamp).encode(), (token + "." + timestamp).encode(), 'sha256').hexdigest() != challenge:
-        return R.validateFailedMsg('用户名或者密码错误')
+        return R.validateFailedMsg('用户名或者密码错�?')
 
     if math.fabs(int(time.time()) - int(timestamp)) >= 300:
-        return R.validateFailedMsg('用户名或者密码错误')
+        return R.validateFailedMsg('用户名或者密码错�?')
 
     return JwtUtil.generate_token(info.id)
 
 @auth_api.route("/login/wx", methods=['POST'], strict_slashes=False)
 def wx_login():
     """
-    微信小程序登陆
+    微信小程序登�?
     @param code: 小程序登陆api获取的code
     @param userInfo: 小程序获取的用户信息e.detail.rawData
     @return: access_token:登陆令牌 refresh_token:刷新令牌
@@ -58,7 +58,7 @@ def wx_login():
     user_oauth = PowerUserOauth.query.filter_by(openid=openid).first()
 
     if not user_oauth:
-        # 创建新用户
+        # 创建新用�?
 
         nickname = info_wx['nickName'] if 'nickName' in info_wx else ''
         sex = info_wx['gender'] if 'gender' in info_wx else ''
@@ -87,7 +87,7 @@ def wx_login():
 
 
 @auth_api.route("/refresh", methods=['GET'], strict_slashes=False)
-@jwt_refresh_token_required
+#@jwt_refresh_token_required
 def refresh():
     """
     刷新token
@@ -98,7 +98,7 @@ def refresh():
 
 
 @auth_api.route("/info", methods=['GET'])
-@jwt_required
+@jwt_required()
 def getUserBasicInfo():
     """
     获取用户基本信息
@@ -120,7 +120,7 @@ def getUserBasicInfo():
     return R.successData(result_user_info)
 
 @auth_api.route("/info/<int:user_id>", methods=['PUT'])
-@jwt_required
+@jwt_required()
 def updateUserInfo(user_id):
     """
     修改用户基本信息
@@ -147,7 +147,7 @@ def updateUserInfo(user_id):
 
     user_info = PowerUserInfo.query.filter_by(id=user_id).first()
     if not user_info:
-        return R.failedMsg("找不到用户")
+        return R.failedMsg("找不到用�?")
 
     user_info.nick_name = nick_name
     user_info.real_name = real_name

@@ -16,7 +16,7 @@ feedback_api = Blueprint("feedback", __name__)
 
 
 @feedback_api.route("/", methods=['POST'], strict_slashes=False)
-@jwt_required
+@jwt_required()
 def postFeedback():
     """
     提交反馈意见
