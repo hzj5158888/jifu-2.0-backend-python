@@ -8,6 +8,7 @@ from common.api.system_assert import Assert
 from common.enums.report_status_enum import ReportStatus
 from common.enums.report_operate_types_enum import ReportRecordLogTypes
 from service.member_service import MemberService
+from service.report_push_service import ReportPushService
 
 
 class ReportLogService:
@@ -58,6 +59,12 @@ class ReportLogService:
         change_log_service = ReportLogService(ReportRecordLogTypes.CHANGE_STATUS.value, report_id, member_id,
                                               status_change_term)
         change_log_service.insertReportRecordLog()
+        
+        # 企业微信消息撤回兼二次推送功能
+        if report_info.status == ReportStatus.UNCONFIRMED and new_status == ReportStatus.CONFIRMED: # 有人接单
+            ReportPushService.recall(report_id)
+        elif report_info.status != ReportStatus.UNCONFIRMED and new_status == ReportStatus.UNCONFIRMED: # 修不好了 再推送一遍
+            ReportPushService.push(report_id)
 
     @staticmethod
     def insertChangeNoteRecordLog(report_id, member_id, note):

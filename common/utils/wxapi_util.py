@@ -62,6 +62,23 @@ class WxApiUtil:
             Assert.fail("微信公众号AccessToken获取失败")
 
         return ret['access_token']
+    
+    @staticmethod
+    def getQyAccessToken():
+        """
+        获取企业微信AccessToken
+        @return: AccessToken
+        """
+        qywx_token_url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s"
+
+        from application import app
+        # FIXME in profile_config.py
+        result = requests.get(qywx_token_url % (app.config['WX_QY_CORP_ID'], app.config['WX_QY_CORP_SECRET']))
+        ret = result.json()
+        if WxApiUtil.is_fail(ret):
+            Assert.fail("企业微信AccessToken获取失败")
+
+        return ret['access_token']
 
     @staticmethod
     def getMpMaterialCounts():

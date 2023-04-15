@@ -25,6 +25,15 @@ class DevelopmentProfileConfig(ProfileConfig):
     WX_APP_SECRET = "5e1f0457090ffbdf05c4cbc0486652b2"
     WX_MP_ID = "wx1245e18904d67a4a"
     WX_MP_SECRET = "d5312e328fc8a6ea35732477d3b13012"
+    WX_QY_CORP_ID = "wwfa9562749e6077e6"
+    WX_QY_CORP_SECRET = "dfwom_hGAas99K6dYdYg2B5rn6X5ZziAP1hoR7VevHc"
+    WX_QY_AGENT_ID = 1000002
+    WX_QY_PARTY_GZ = "4"
+    WX_QY_PARTY_ZS = "6"
+    WX_QY_PARTY_YF = ""
+    WX_QY_PARTY_TEST = "10"
+    WX_QY_TOKEN = "Vd6tkcB8FfU7MnRXFo"
+    WX_QY_AES_KEY = "8Xm2nOfr4wKWvtaEKdO2HCiPftlrWa5bb5Lt21MfBak"
 
 
 class ProductionProfileConfig(ProfileConfig):
@@ -40,6 +49,15 @@ class ProductionProfileConfig(ProfileConfig):
     WX_APP_SECRET = "5e1f0457090ffbdf05c4cbc0486652b2"
     WX_MP_ID = "wx1245e18904d67a4a"
     WX_MP_SECRET = "d5312e328fc8a6ea35732477d3b13012"
+    WX_QY_CORP_ID = "wwfa9562749e6077e6"
+    WX_QY_CORP_SECRET = "dfwom_hGAas99K6dYdYg2B5rn6X5ZziAP1hoR7VevHc"
+    WX_QY_AGENT_ID = 1000002
+    WX_QY_PARTY_GZ = "4"
+    WX_QY_PARTY_ZS = "6"
+    WX_QY_PARTY_YF = ""
+    WX_QY_PARTY_TEST = "10"
+    WX_QY_TOKEN = "Vd6tkcB8FfU7MnRXFo"
+    WX_QY_AES_KEY = "8Xm2nOfr4wKWvtaEKdO2HCiPftlrWa5bb5Lt21MfBak"
 
 
 config_map = {

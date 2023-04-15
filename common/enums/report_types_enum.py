@@ -14,3 +14,7 @@ class ReportTypes(Enum):
     @staticmethod
     def value_list():
         return list(map(lambda c: c.value, ReportTypes))
+    
+    def get_type_name(idx):
+        return "学生" if idx == ReportTypes.STUDENT else "老师"
+    

@@ -10,6 +10,7 @@ from common.models.report_picture import ReportPicture
 from common.models.report_record_log import ReportRecordLog
 from common.models.campus_info import CampusInfo
 from service.report_service import ReportService
+from service.report_push_service import ReportPushService
 from service.member_service import MemberService
 from service.user_service import UserService
 
@@ -107,6 +108,8 @@ def insertReport():
             model_report_pic.img_url = url
             db.session.add(model_report_pic)
             db.session.commit()
+    
+    ReportPushService.push(model_report.id) # 企业微信推送
 
     return R.successData(report_id=model_report.id)
 
