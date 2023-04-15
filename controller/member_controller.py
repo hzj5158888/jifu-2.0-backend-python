@@ -17,6 +17,8 @@ from common.models.report_info import ReportInfo
 from common.models.campus_dept_info import CampusDeptInfo
 from common.models.campus_member import CampusMember
 from common.models.report_group import ReportGroup
+from common.models.invite_code import InviteCode
+from common.models.power_user_info import PowerUserInfo
 from common.models.campus_member_merits_record import CampusMemberMeritsRecord
 from application_initializer import db
 from common.enums.report_status_enum import ReportStatus
@@ -32,6 +34,123 @@ from flask_jwt_extended import jwt_required
 from service.report_service import ReportService
 
 member_api = Blueprint("member", __name__)
+
+@member_api.route("/<int:user_id>/signup", methods=['PUT'])
+@jwt_required()
+def addMemberInfo(user_id):
+    """
+    成员注册
+    @param (Query)userId 用户id
+    @param (Body){
+        "real_name": member_info.real_name,
+        "avatar_url": member_info.avatar_url,
+        "phone": member_info.phone,
+        "campus_id" : cmember_info.ampus_id
+        "dept_id" : member_info.dept_id
+        "class_name" : member_info.class_name
+        "invite_code" : member_info.invite_code
+    }
+    @return:
+    """
+    req = request.get_json()
+    real_name = req.get("real_name")
+    avatar_url = req.get("avatar_url")
+    phone = req.get("phone")
+    campus_id = req.get("campus_id")
+    dept_id = req.get("dept_id")
+    class_name = req.get("class_name")
+    invite_code = req.get("invite_code")
+    if avatar_url is None:
+        return R.validateFailed()
+    
+    if invite_code is None:
+        return R.failedMsg("邀请码为空")
+    elif invite_code not in InviteCode.query.all():
+        return R.failedMsg("邀请码错误")
+
+    user_info = PowerUserInfo.query.filter_by(id=user_id).first()
+    if not user_info:
+        return R.failedMsg("找不到用户")
+    
+    if CampusMember.query.filter_by(user_id = user_id).first() is not None:
+        return R.failedMsg("成员账户已存在")
+    
+    member_info = CampusMember()
+    member_info.user_id = user_id
+    member_info.campus_id = campus_id
+    member_info.dept_id = dept_id
+    member_info.name = real_name
+    member_info.phone = phone
+    member_info.class_name = class_name
+    member_info.merits = 0
+    member_info.position = "小干"
+    member_info.status = 0
+    member_info.start_time = datetime.datetime.now
+    member_info.end_time = member_info.start_time + datetime.timedelta(days = 365 * 2)
+    
+    db.session.add(member_info)
+    db.session.commit()
+
+    return R.success("注册成功，等待审核")
+
+@member_api.route("/<int:member_id>/modifyinfo", methods=['PUT'])
+@jwt_required()
+def updateMemberInfo(member_id):
+    """
+    成员资料修改
+    @param (Query)userId 用户id
+    @param (Body){
+        "real_name": member_info.real_name,
+        "avatar_url": member_info.avatar_url,
+        "phone": member_info.phone,
+        "campus_id" : cmember_info.ampus_id
+        "dept_id" : member_info.dept_id
+        "class_name" : member_info.class_name
+        "start_time" : member_info.start_time
+        "end_time" : member_info.end_time
+    }
+    @return:
+    """
+    req = request.get_json()
+    real_name = req.get("real_name")
+    phone = req.get("phone")
+    campus_id = req.get("campus_id")
+    dept_id = req.get("dept_id")
+    class_name = req.get("class_name")
+    
+    member_info = CampusMember.query.filter_by(id = member_id).first()
+    if not member_info:
+        return R.failedMsg("该用户不是成员")
+    
+    member_info.campus_id = campus_id
+    member_info.dept_id = dept_id
+    member_info.name = real_name
+    member_info.phone = phone
+    member_info.class_name = class_name
+    member_info.status = 0
+    
+    db.session.add(member_info)
+    db.session.commit()
+
+    return R.success("修改成功，等待审核")
+
+
+@member_api.route("/<int:member_id>/del", methods=['PUT'])
+@jwt_required()
+def delMember(member_id):
+    """
+    成员注销
+    @param (Query)userId 用户id
+    @return:
+    """
+    
+    member_info = CampusMember.query.filter_by(id = member_id).first()
+    if not member_info:
+        return R.failedMsg("该用户不是成员")
+    
+    db.session.delete(member_info)
+    db.session.commit()
+    
 
 @member_api.route("/<int:member_id>/info", methods=['GET'])
 @jwt_required()

@@ -3,6 +3,7 @@ import hmac
 import math
 import time
 import uuid
+import datetime
 
 import requests
 from flask import Blueprint, request
@@ -10,6 +11,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 import json
 from application_initializer import db
 from common.api.common_result import R
+from common.models.campus_member import CampusMember
 from common.models.power_user_info import PowerUserInfo
 from common.models.power_user_oauth import PowerUserOauth
 from common.utils.jwt_util import JwtUtil
@@ -43,7 +45,7 @@ def web_login(username, token, challenge, timestamp):
 @auth_api.route("/login/wx", methods=['POST'], strict_slashes=False)
 def wx_login():
     """
-    微信小程序登�?
+    微信小程序登录
     @param code: 小程序登陆api获取的code
     @param userInfo: 小程序获取的用户信息e.detail.rawData
     @return: access_token:登陆令牌 refresh_token:刷新令牌
