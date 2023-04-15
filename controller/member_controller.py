@@ -34,7 +34,7 @@ from service.report_service import ReportService
 member_api = Blueprint("member", __name__)
 
 @member_api.route("/<int:member_id>/info", methods=['GET'])
-@jwt_required
+@jwt_required()
 def memberGetInfo(member_id):
     """
     职员获取个人信息
@@ -45,7 +45,7 @@ def memberGetInfo(member_id):
 
 
 @member_api.route("/<int:member_id>/merits_logs", methods=['GET'])
-@jwt_required
+@jwt_required()
 def memberGerMeritsLogs(member_id):
     """
     职员查看个人绩效记录
@@ -68,7 +68,7 @@ def memberGerMeritsLogs(member_id):
 
 
 @member_api.route("/<int:report_id>/status", methods=['POST'])
-@jwt_required
+@jwt_required()
 def memberOpsOneReport(report_id):
     """
     职员对单个报障进行操作
@@ -120,7 +120,7 @@ def memberOpsOneReport(report_id):
 
 
 @member_api.route("/<int:report_id>/note", methods=['POST'])
-@jwt_required
+@jwt_required()
 def memberSetReportNote(report_id):
     """
     对单个报障填写备注
@@ -144,7 +144,7 @@ def memberSetReportNote(report_id):
 
 
 @member_api.route("/<int:report_id>/unableReason", methods=['POST'])
-@jwt_required
+@jwt_required()
 def memberSetReportUnableReason(report_id):
     """
     对单个报障填写无法处理的原因
@@ -182,7 +182,7 @@ def memberSetReportUnableReason(report_id):
 
 
 @member_api.route("/<int:member_id>/reports", methods=['GET'])
-@jwt_required
+@jwt_required()
 def campusUserCheckReceivedReport(member_id):
     """
     职员查看已接受的任务
@@ -210,7 +210,7 @@ def campusUserCheckReceivedReport(member_id):
 
 
 @member_api.route("/<int:campus_id>/getreports", methods=['GET'])
-@jwt_required
+@jwt_required()
 def memberReceiveReport(campus_id):
     """
     职员查看可领取/全部的任务
@@ -236,7 +236,7 @@ def memberReceiveReport(campus_id):
 
 
 @member_api.route("/<int:report_id>/invitation", methods=['POST'])
-@jwt_required
+@jwt_required()
 def inviteOtherMember(report_id):
     """
     报障团队队长邀请队员
@@ -283,7 +283,7 @@ def inviteOtherMember(report_id):
 
 
 @member_api.route("/<int:campus_id>/members", methods=['GET'])
-@jwt_required
+@jwt_required()
 def listAllMember(campus_id):
     """
     查看某个校区在职的职员信息
