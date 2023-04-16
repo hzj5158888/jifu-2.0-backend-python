@@ -88,8 +88,8 @@ def wx_login():
     return JwtUtil.generate_token(user_id)
 
 
-@auth_api.route("/refresh", methods=['GET'], strict_slashes=False)
-#@jwt_refresh_token_required
+@auth_api.route("/refresh", methods=['POST'], strict_slashes=False)
+@jwt_required(refresh=True)
 def refresh():
     """
     刷新token
