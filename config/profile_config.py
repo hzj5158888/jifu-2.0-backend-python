@@ -14,7 +14,8 @@ class ProfileConfig(object):
 class DevelopmentProfileConfig(ProfileConfig):
     """开发模式的配置信息"""
     # 数据库 FIXME!
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:gdpujf2021@39.108.228.165:3306/gdpujf-dev"
+    #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:gdpujf2021@39.108.228.165:3306/gdpujf-dev"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:gdpujf2021@127.0.0.1:3306/gdpujf_dev"
     DEBUG = True
     PORT = 3307
     # 七牛云配置 FIXME!
