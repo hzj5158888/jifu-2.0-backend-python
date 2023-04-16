@@ -15,13 +15,13 @@ from service.member_service import MemberService
 
 admin_api = Blueprint("admin", __name__)
 
-@admin_api.route("/login", methods=['POST'])
-def admin_login():
+@admin_api.route("/<int:campus_id>/login", methods=['POST'])
+def admin_login(campus_id):
     """
     管理员登陆
     @return: token
     """
-    info = Admin.query.first()
+    info = Admin.query.filter_by(campus_id = campus_id).first()
     data = request.form
     
     pwd = data.get("password")
