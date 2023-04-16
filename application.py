@@ -16,7 +16,7 @@ if __name__ == '__main__':
             db.drop_all()
             db.create_all()
     
-    if 'dbinit' in sys.argv:
+    if 'initdb' in sys.argv:
         InitDataBase.init_db()
 
     app.run()
