@@ -62,7 +62,7 @@ class ReportLogService:
         
         # 企业微信消息撤回兼二次推送功能
         if report_info.status == ReportStatus.UNCONFIRMED and new_status == ReportStatus.CONFIRMED: # 有人接单
-            ReportPushService.recall(report_id)
+            ReportPushService.push(report_id)
         elif report_info.status != ReportStatus.UNCONFIRMED and new_status == ReportStatus.UNCONFIRMED: # 修不好了 再推送一遍
             ReportPushService.push(report_id)
 
