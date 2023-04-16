@@ -28,10 +28,8 @@ def invalid_token_handler(invalidMsg):
 jwt_config_map = {
     # jwt加解密密钥
     "JWT_SECRET_KEY": "4xp5AU9lOvurRPAAkDerbt8VO2KkLW2Jmylz5k6C",
-    # 是否开启黑名单
-    "JWT_BLACKLIST_ENABLED": False,
     # 设置过期时间
     "JWT_ACCESS_TOKEN_EXPIRES": datetime.timedelta(days=30),
     # jwt头部位置
-    "JWT_TOKEN_LOCATION": ['headers']
+    "JWT_TOKEN_LOCATION": ['additional_headers']
 }

@@ -30,7 +30,7 @@ class JwtUtil:
         info_claim["is_member"] = StatusEnum.OPEN.value if member_info else StatusEnum.CLOSE.value
         member_id = member_info.id if member_info else None
 
-        access_token = create_access_token(identity=user_id, user_claims=info_claim)
+        access_token = create_access_token(identity=user_id, additional_claims=info_claim)
         
         refresh_token = create_refresh_token(identity=user_id)
 
