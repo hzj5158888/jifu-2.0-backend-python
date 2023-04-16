@@ -93,6 +93,7 @@ def addMemberInfo(user_id):
 
     return R.success("注册成功，等待审核")
 
+
 @member_api.route("/<int:member_id>/modifyinfo", methods=['PUT'])
 @jwt_required()
 def updateMemberInfo(member_id):

@@ -60,7 +60,7 @@ def wx_login():
     user_oauth = PowerUserOauth.query.filter_by(openid=openid).first()
 
     if not user_oauth:
-        # 创建新用�?
+        # 创建新用户
 
         nickname = info_wx['nickName'] if 'nickName' in info_wx else ''
         sex = info_wx['gender'] if 'gender' in info_wx else ''
@@ -149,7 +149,7 @@ def updateUserInfo(user_id):
 
     user_info = PowerUserInfo.query.filter_by(id=user_id).first()
     if not user_info:
-        return R.failedMsg("找不到用�?")
+        return R.failedMsg("找不到用户")
 
     user_info.nick_name = nick_name
     user_info.real_name = real_name
