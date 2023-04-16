@@ -12,13 +12,11 @@ from common.enums.report_types_enum import ReportTypes
 
 class ReportPushService:
     qy_token = ""
-    token_last_update = 0
     message_dict = {}
 
     @classmethod
     def update_token(self):
         self.qy_token = WxApiUtil.getQyAccessToken()
-        self.token_last_update = int(datetime.datetime.now().timestamp())
     
     @classmethod
     def getime(self):
@@ -29,9 +27,7 @@ class ReportPushService:
         """
         @param report_id: 需要推送的报障单的ID
         """
-        cur_time = self.getime()
-        if (cur_time > self.token_last_update + 4800): # token过期，重新获取
-            self.update_token()
+        self.update_token()
         
         report_info = ReportInfo.query.filter(id = report_id).first()
         
@@ -102,9 +98,7 @@ class ReportPushService:
         @param report_id 报障单的ID
         @param message: 需要推送的报障单的信息
         """
-        cur_time = self.getime()
-        if (cur_time > self.token_last_update + 4800): # token过期，重新获取
-            self.update_token()
+        self.update_token()
         
         name = message[0]
         type_name = ReportTypes.get_type_name(message[1]) + "报障"
@@ -176,9 +170,7 @@ class ReportPushService:
         """
         @param report_id: 需要撤回的报障单的ID
         """
-        cur_time = self.getime()
-        if (cur_time > self.token_last_update + 4800): # token过期，重新获取
-            self.update_token()
+        self.update_token()
         
         json_recall_dict = {
             "msgid": ""
