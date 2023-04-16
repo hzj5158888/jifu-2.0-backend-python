@@ -10,6 +10,7 @@ from common.utils.jwt_util import JwtUtil
 from common.api.common_result import R
 from common.models.admin import Admin
 from common.models.campus_member import CampusMember
+from common.models.invite_code import InviteCode
 
 from service.member_service import MemberService
 
@@ -40,7 +41,7 @@ def admin_login(campus_id):
     return JwtUtil.generate_token(97100109105110)
 
 
-@admin_api.route("/<int:campus_id>/getinfo", methods=['GET'], strict_slashes=False)
+@admin_api.route("/<int:campus_id>/member/info/get", methods=['GET'], strict_slashes=False)
 @jwt_required()
 def getAllMemberInfo(campus_id):
     """
@@ -58,7 +59,7 @@ def getAllMemberInfo(campus_id):
     
     return R.success(AllMember_Info)
 
-@admin_api.route("/<int:campus_id>/modifyinfo/<int:member_id>", methods=['PUT'])
+@admin_api.route("/<int:campus_id>/member/info/modify/<int:member_id>", methods=['PUT'])
 @jwt_required()
 def modifyinfo(campus_id, member_id):
     """
@@ -72,10 +73,45 @@ def modifyinfo(campus_id, member_id):
     
     member_info = CampusMember.query.filter_by(id = member_id, campus_id = campus_id).first()
     if not member_info:
-        return R.failedMsg("找不到用户?")
+        return R.failedMsg("找不到用户")
     
     member_info.status = status
     db.session.add(member_info)
     db.session.commit()
+    
+    return R.success()
+
+@admin_api.route("/<int:campus_id>/invitecode/get", methods=['GET'])
+@jwt_required()
+def getInviteCode(campus_id):
+    """
+    邀请码获取
+    @param campus_id: 校区id
+    """
+    invite_code = InviteCode.query.filter_by(campus_id = campus_id).first()
+    if not invite_code:
+        return R.failedMsg("邀请码不存在")
+    
+    return R.success(invite_code.code)
+
+@admin_api.route("/<int:campus_id>/invitecode/modify", methods=['PUT'])
+@jwt_required()
+def modifyInviteCode(campus_id):
+    """
+    邀请码修改
+    @param campus_id: 校区id
+    """
+    req = request.get_json()
+    
+    new_invite_code = req.get('invitecode')
+    
+    invite_code = InviteCode.query.filter_by(campus_id = campus_id).first()
+    if not invite_code:
+        invite_code = InviteCode()
+        invite_code.campus_id = campus_id
+    
+    invite_code.code = new_invite_code
+    db.session.add(invite_code)
+    db.commit()
     
     return R.success()
