@@ -5,12 +5,15 @@
 @note     
 """
 
+from flask_jwt_extended import get_jwt, jwt_required
+
 class UserService:
 
     @staticmethod
+    @jwt_required()
     def isMember():
         """
         通过jwt判断当前用户是否为职员
         @return:
         """
-        #return get_jwt_claims()["is_member"]
+        return get_jwt()["is_member"]
