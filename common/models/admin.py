@@ -16,4 +16,4 @@ class Admin(db.Model):
     gmt_create = db.Column(db.DateTime, default=datetime.now)
     gmt_modified = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     
-    campus = db.relationship('CampusInfo', primaryjoin='admin.campus_id == CampusInfo.id', backref='admin')
+    campus = db.relationship('CampusInfo', primaryjoin='Admin.campus_id == CampusInfo.id', backref='admin')
