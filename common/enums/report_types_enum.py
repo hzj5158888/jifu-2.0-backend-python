@@ -16,5 +16,5 @@ class ReportTypes(Enum):
         return list(map(lambda c: c.value, ReportTypes))
     
     def get_type_name(idx):
-        return "学生" if idx == ReportTypes.STUDENT else "老师"
+        return "学生" if idx == ReportTypes.STUDENT.value else "老师"
     
