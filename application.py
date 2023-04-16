@@ -1,6 +1,6 @@
 # coding:utf-8
 import sys
-from tools.init_database import InitDataBase
+import tools.init_database as InitDataBase
 
 from application_initializer import create_application, db
 
@@ -17,6 +17,7 @@ if __name__ == '__main__':
             db.create_all()
     
     if 'initdb' in sys.argv:
-        InitDataBase.init_db()
+        with app.app_context():
+            InitDataBase.init_db()
 
     app.run()
