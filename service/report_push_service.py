@@ -1,7 +1,8 @@
 import json
-import datetime
+import datetime, time
 import requests
 
+from application_initializer import db
 from common.api.common_result import R
 from common.models.report_info import ReportInfo
 from common.models.campus_info import CampusInfo
@@ -12,7 +13,6 @@ from common.enums.report_types_enum import ReportTypes
 
 class ReportPushService:
     qy_token = ""
-    message_dict = {}
 
     @classmethod
     def update_token(self):
@@ -79,20 +79,22 @@ class ReportPushService:
         json_report_str = json.dumps(json_report_dict)
         response_send = requests.post("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}".format(access_token = self.qy_token), data = json_report_str)
         
-        res = json.loads(response_send.text)
-        print(res)
+        response_dict = json.loads(response_send.text)
         
-        if res['errmsg'] != 'ok':
+        if response_dict['errmsg'] != 'ok':
             print("report_push_server: push: response_send error!, errmsg = ")
+            print(response_dict)
             return False
 
-        if report_info.status == ReportStatus.UNCONFIRMED:
-            self.message_dict[report_id] = [self.getime(), res['msgid']]
+        if report_info.status == ReportStatus.UNCONFIRMED.value:
+            report_info.msgid = response_dict['msgid']
+            db.session.add(report_info)
+            db.session.commit()
         
         return True
     
     @classmethod
-    def recall(self, report_id): # 报障单撤回函数
+    def recall(self, report_id): # 报障单消息撤回函数
         """
         @param report_id: 需要撤回的报障单的ID
         """
@@ -102,14 +104,16 @@ class ReportPushService:
             "msgid": ""
         }
         
-        for (cur_report_id, cur_value) in self.message_dict.items():
-            if self.getime() - cur_value[0] > 86400:
-                del self.message_dict[cur_report_id]
+        report_list = ReportInfo.query.all()
+        for report in report_list:
+            if self.getime() - int(report.gmt_modified.timestamp()) > 86400:
+                report.msgid = ''
+                db.session.add(report)
                 continue
-            if report_id != cur_report_id:
+            if report_id != report.id:
                 continue
             
-            json_recall_dict['msgid'] = cur_value[1]
+            json_recall_dict['msgid'] = report.msgid
             json_recall_str = json.dumps(json_recall_dict)
             response_send = requests.post("https://qyapi.weixin.qq.com/cgi-bin/message/recall?access_token={access_token}".format(access_token = self.qy_token), data = json_recall_str)
             response_dict = json.loads(response_send.text)
@@ -117,7 +121,8 @@ class ReportPushService:
                 print('report_push_server: recall: response_send error！errmsg = ')
                 print(response_dict)
             
-            del self.message_dict[cur_report_id]
-            break
-
+            report.msg_id = ''
+            db.session.add(report)
+        
+        db.session.commit()
         self.push(report_id)  # 推送报障单当前状态

@@ -27,6 +27,7 @@ class ReportInfo(db.Model):
     evaluate = db.Column(db.Integer, nullable=False)
     type = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer, nullable=False)
+    msgid = db.Column(db.String(255), default='')
     gmt_create = db.Column(db.DateTime, default=datetime.now)
     gmt_modified = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
