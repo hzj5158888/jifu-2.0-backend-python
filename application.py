@@ -1,5 +1,6 @@
 # coding:utf-8
 import sys
+from tools.init_database import InitDataBase
 
 from application_initializer import create_application, db
 
@@ -7,12 +8,15 @@ from application_initializer import create_application, db
 app = create_application("develop")
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2 and sys.argv[1] == 'createdb':
+    if 'createdb' in sys.argv and 'resetdb' not in sys.argv:
         with app.app_context():
             db.create_all()
-    elif len(sys.argv) == 2 and sys.argv[1] == 'resetdb':
+    elif 'resetdb' in sys.argv:
         with app.app_context():
             db.drop_all()
             db.create_all()
     
+    if 'dbinit' in sys.argv:
+        InitDataBase.init_db()
+
     app.run()
