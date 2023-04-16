@@ -65,7 +65,7 @@ def addMemberInfo(user_id):
     
     if invite_code is None:
         return R.failedMsg("邀请码为空")
-    elif invite_code not in InviteCode.query.all():
+    elif invite_code not in InviteCode.query.fliter_by(campus_id = campus_id).with_entities(InviteCode.code).all():
         return R.failedMsg("邀请码错误")
 
     user_info = PowerUserInfo.query.filter_by(id=user_id).first()
