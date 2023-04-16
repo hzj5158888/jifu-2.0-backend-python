@@ -193,6 +193,5 @@ class ReportPushService:
             
             del self.message_dict[cur_report_id]
             break
-            
-        return # FIXME! 数据库搞定再删
+
         self.push(report_id)  # 推送报障单当前状态
