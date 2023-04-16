@@ -13,6 +13,7 @@ def create_router(application):
     from controller.report_controller import report_api
     from controller.auth_controller import auth_api
     from controller.article_controller import article_api
+    from controller.admin_controller import admin_api
     from controller.member_controller import member_api
     from controller.feedback_controller import feedback_api
 
@@ -25,6 +26,7 @@ def create_router(application):
     application.register_blueprint(report_api, url_prefix="/report")
     application.register_blueprint(auth_api, url_prefix="/auth")
     application.register_blueprint(article_api, url_prefix="/article")
+    application.register_blueprint(admin_api, url_prefix="/admin")
     application.register_blueprint(member_api, url_prefix="/member")
     application.register_blueprint(feedback_api, url_prefix="/feedback")
 

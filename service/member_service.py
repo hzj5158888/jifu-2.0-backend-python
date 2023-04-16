@@ -73,7 +73,8 @@ class MemberService:
             "is_tenure": is_tenure,
             "dept": member_info.dept.name,
             "position": member_info.position,
-            "merits":float(member_info.merits)
+            "merits": float(member_info.merits),
+            "status": member_info.status
         }
         return info_dict
 
