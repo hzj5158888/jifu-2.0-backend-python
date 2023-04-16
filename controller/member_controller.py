@@ -152,6 +152,7 @@ def delMember(member_id):
     db.session.delete(member_info)
     db.session.commit()
     
+    return R.success()
 
 @member_api.route("/<int:member_id>/info", methods=['GET'])
 @jwt_required()
