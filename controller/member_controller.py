@@ -213,6 +213,9 @@ def memberOpsOneReport(report_id):
 
     if (status not in ReportStatus.value_list()) or status == report_info.status:
         return R.validateFailedMsg("无效的修改操作")
+    
+    if report_info.status == ReportStatus.UNCONFIRMED.value and status == ReportStatus.FINISHED.value:
+        return R.validateFailedMsg("无效的修改操作：无法从待确认直接修改至已完成")
 
     if report_info.status in [ReportStatus.CANCELED.value, ReportStatus.FINISHED.value, ReportStatus.REJECTED.value]:
         return R.failedMsg("当前此报障状态无法再次修改")
