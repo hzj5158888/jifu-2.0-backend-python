@@ -64,7 +64,7 @@ def init_campus_system_info_gz():
     campus_system_info = CampusSystemInfo()
     campus_system_info.campus_id = 1
     campus_system_info.report_status = 1
-    campus_system_info.report_status = '服务已下线'
+    campus_system_info.report_content = '服务已下线'
     campus_system_info.apply_status = 1
     campus_system_info.apply_content = '服务已下线'
     campus_system_info.report_student_size = 100
@@ -95,5 +95,6 @@ def init_db_gz():
     init_campus_info_gz()
     init_campus_dept_info_gz()
     init_campus_carousel_gz()
+    init_campus_system_info_gz()
     init_invite_code_gz()
     init_administrator_gz()
