@@ -3,6 +3,7 @@ from common.models.campus_info import CampusInfo
 from common.models.campus_dept_info import CampusDeptInfo
 from common.models.campus_carousel import CampusCarousel
 from common.models.invite_code import InviteCode
+from common.models.campus_system_info import CampusSystemInfo
 from common.models.admin import Admin
 
 def init_campus_info_gz():
@@ -54,6 +55,23 @@ def init_campus_carousel_gz():
         campus_carousel.url = url
         db.session.add(campus_carousel)
     
+    db.session.commit()
+    
+
+def init_campus_system_info_gz():
+    # 大学城
+    
+    campus_system_info = CampusSystemInfo()
+    campus_system_info.campus_id = 1
+    campus_system_info.report_status = 1
+    campus_system_info.report_status = '服务已下线'
+    campus_system_info.apply_status = 1
+    campus_system_info.apply_content = '服务已下线'
+    campus_system_info.report_student_size = 100
+    campus_system_info.report_teacher_size = 100
+    campus_system_info.student_report_basic = 10
+    campus_system_info.teacher_report_basic = 10
+    db.session.add(campus_system_info)
     db.session.commit()
     
 
