@@ -28,6 +28,7 @@ from common.models.report_picture import ReportPicture
 from service.report_log_service import ReportLogService
 from service.member_service import MemberService
 from service.report_group_service import ReportGroupService
+from service.report_push_service import ReportPushService
 from sqlalchemy import and_
 from flask_jwt_extended import jwt_required
 
@@ -223,9 +224,16 @@ def memberOpsOneReport(report_id):
 
     ReportLogService.insertChangeStatusRecordLog(report_id, operator, status)
 
+    orgin_status = report_info.status
     report_info.status = status
     db.session.add(report_info)
     db.session.commit()
+    
+    # 企业微信消息撤回兼二次推送功能
+    if orgin_status == ReportStatus.UNCONFIRMED.value and status == ReportStatus.CONFIRMED.value: # 有人接单
+        ReportPushService.recall(report_id)
+    elif orgin_status != ReportStatus.UNCONFIRMED.value and status == ReportStatus.UNCONFIRMED.value: # 修不好了 再推送一遍
+        ReportPushService.push(report_id)
 
     if status==ReportStatus.CONFIRMED.value:
         model_group = ReportGroup()

@@ -60,12 +60,6 @@ class ReportLogService:
                                               status_change_term)
         change_log_service.insertReportRecordLog()
         
-        # 企业微信消息撤回兼二次推送功能
-        if report_info.status == ReportStatus.UNCONFIRMED.value and new_status == ReportStatus.CONFIRMED.value: # 有人接单
-            ReportPushService.recall(report_id)
-        elif report_info.status != ReportStatus.UNCONFIRMED.value and new_status == ReportStatus.UNCONFIRMED.value: # 修不好了 再推送一遍
-            ReportPushService.push(report_id)
-
     @staticmethod
     def insertChangeNoteRecordLog(report_id, member_id, note):
         """
