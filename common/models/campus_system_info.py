@@ -16,8 +16,8 @@ class CampusSystemInfo(db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True)
     campus_id = db.Column(db.ForeignKey('campus_info.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    report_status = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
-    report_content = db.Column(db.String(255), nullable=False, server_default=db.FetchedValue())
+    report_status = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue()) # 校区报障系统状态
+    report_content = db.Column(db.String(255), nullable=False, server_default=db.FetchedValue()) # 校区报障系统关闭原因
     apply_status = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
     apply_content = db.Column(db.String(255), nullable=False, server_default=db.FetchedValue())
     report_student_size = db.Column(db.Integer, nullable=False)
