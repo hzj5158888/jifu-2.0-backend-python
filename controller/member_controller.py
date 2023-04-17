@@ -230,10 +230,9 @@ def memberOpsOneReport(report_id):
     db.session.commit()
     
     # 企业微信消息撤回兼二次推送功能
-    if orgin_status == ReportStatus.UNCONFIRMED.value and status == ReportStatus.CONFIRMED.value: # 有人接单
+    # 有人接单或无法处理
+    if orgin_status == ReportStatus.UNCONFIRMED.value or status == ReportStatus.UNCONFIRMED.value:
         ReportPushService.recall(report_id)
-    elif orgin_status != ReportStatus.UNCONFIRMED.value and status == ReportStatus.UNCONFIRMED.value: # 修不好了 再推送一遍
-        ReportPushService.push(report_id)
 
     if status==ReportStatus.CONFIRMED.value:
         model_group = ReportGroup()

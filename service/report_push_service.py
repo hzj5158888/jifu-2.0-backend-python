@@ -78,7 +78,6 @@ class ReportPushService:
         
         json_report_str = json.dumps(json_report_dict)
         response_send = requests.post("https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}".format(access_token = self.qy_token), data = json_report_str)
-        
         response_dict = json.loads(response_send.text)
         
         if response_dict['errmsg'] != 'ok':
@@ -86,10 +85,9 @@ class ReportPushService:
             print(response_dict)
             return False
 
-        if report_info.status == ReportStatus.UNCONFIRMED.value:
-            report_info.msgid = response_dict['msgid']
-            db.session.add(report_info)
-            db.session.commit()
+        report_info.msgid = response_dict['msgid']
+        db.session.add(report_info)
+        db.session.commit()
         
         return True
     
@@ -110,7 +108,7 @@ class ReportPushService:
                 report.msgid = ''
                 db.session.add(report)
                 continue
-            if report_id != report.id:
+            if report_id != report.id or report.msgid == '':
                 continue
             
             json_recall_dict['msgid'] = report.msgid
