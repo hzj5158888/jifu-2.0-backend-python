@@ -6,7 +6,7 @@
 @content:职员模块
 """
 import time
-from datetime import datetime
+import datetime
 
 from flask import Blueprint, request
 from common.api.common_result import R
@@ -85,8 +85,8 @@ def addMemberInfo(user_id):
     member_info.merits = 0
     member_info.position = "小干"
     member_info.status = 0
-    member_info.start_time = datetime.datetime.now
-    member_info.end_time = member_info.start_time + datetime.timedelta(days = 365 * 2)
+    member_info.start_time = datetime.datetime.now()
+    member_info.end_time = member_info.start_time + datetime.timedelta(days = 2 * 365)
     
     db.session.add(member_info)
     db.session.commit()
@@ -420,7 +420,7 @@ def listAllMember(campus_id):
 
     dept_info = CampusDeptInfo.query.filter(and_(CampusDeptInfo.campus_id==campus_id, CampusDeptInfo.name==CampusDeptEnum.TECH_DEPT.value)).first()
 
-    query = CampusMember.query.filter(and_(datetime.now() < CampusMember.end_time,
+    query = CampusMember.query.filter(and_(datetime.datetime.now() < CampusMember.end_time,
             CampusMember.dept_id==dept_info.id, CampusMember.status==StatusEnum.OPEN.value))
 
     member_infos = query.paginate(page=page_num, per_page=page_size)
