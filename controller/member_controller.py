@@ -55,14 +55,11 @@ def addMemberInfo(user_id):
     """
     req = request.get_json()
     real_name = req.get("real_name")
-    avatar_url = req.get("avatar_url")
     phone = req.get("phone")
     campus_id = req.get("campus_id")
     dept_id = req.get("dept_id")
     class_name = req.get("class_name")
     invite_code = req.get("invite_code")
-    if avatar_url is None:
-        return R.validateFailed()
     
     if invite_code is None:
         return R.failedMsg("邀请码为空")
