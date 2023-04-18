@@ -31,5 +31,5 @@ jwt_config_map = {
     # 设置过期时间
     "JWT_ACCESS_TOKEN_EXPIRES": datetime.timedelta(days=30),
     # jwt头部位置
-    "JWT_TOKEN_LOCATION": ['additional_headers']
+    "JWT_TOKEN_LOCATION": ['headers']
 }
