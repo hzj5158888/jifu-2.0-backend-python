@@ -57,13 +57,13 @@ def addMemberInfo(user_id):
     real_name = req.get("real_name")
     phone = req.get("phone")
     campus_id = req.get("campus_id")
-    dept_id = req.get("dept_id")
+    dept_name = req.get("dept_name")
     class_name = req.get("class_name")
     invite_code = req.get("invite_code")
     
     if invite_code is None:
         return R.failedMsg("邀请码为空")
-    elif invite_code not in InviteCode.query.fliter_by(campus_id = campus_id).with_entities(InviteCode.code).all():
+    elif invite_code != InviteCode.query.filter_by(campus_id = campus_id).first().code:
         return R.failedMsg("邀请码错误")
 
     user_info = PowerUserInfo.query.filter_by(id=user_id).first()
@@ -76,13 +76,13 @@ def addMemberInfo(user_id):
     member_info = CampusMember()
     member_info.user_id = user_id
     member_info.campus_id = campus_id
-    member_info.dept_id = dept_id
+    member_info.dept_id = CampusDeptInfo.query.filter_by(name = dept_name).first().id
     member_info.name = real_name
     member_info.phone = phone
     member_info.class_name = class_name
     member_info.merits = 0
     member_info.position = "小干"
-    member_info.status = 0
+    member_info.status = 1
     member_info.start_time = datetime.datetime.now()
     member_info.end_time = member_info.start_time + datetime.timedelta(days = 2 * 365)
     
