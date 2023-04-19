@@ -82,7 +82,7 @@ def addMemberInfo(user_id):
     member_info.class_name = class_name
     member_info.merits = 0
     member_info.position = "小干"
-    member_info.status = 1
+    member_info.status = 0
     member_info.start_time = datetime.datetime.now()
     member_info.end_time = member_info.start_time + datetime.timedelta(days = 2 * 365)
     

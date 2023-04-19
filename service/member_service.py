@@ -74,7 +74,9 @@ class MemberService:
             "dept": member_info.dept.name,
             "position": member_info.position,
             "merits": float(member_info.merits),
-            "status": member_info.status
+            "status": member_info.status,
+            "start_time": member_info.start_time.timestamp(),
+            "end_time": member_info.end_time.timestamp()
         }
         return info_dict
 

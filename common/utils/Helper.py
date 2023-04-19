@@ -6,7 +6,7 @@
 """
 
 
-
+import random
 from common.models.campus_system_info import CampusSystemInfo
 import datetime
 from common.models.report_info import ReportInfo
@@ -21,3 +21,11 @@ def getCurrentDate(formatted="%Y-%m-%d %H:%M:%S"):
     @return 格式化的当前时间
     """
     return datetime.datetime.now().strftime(formatted)
+
+def randomStr(len):
+    digits = '0123456789'
+    ascii_letters = 'abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    invite_code_list = [random.choice(digits + ascii_letters) for i in range(len)]
+    invite_code = ''.join(invite_code_list)
+    
+    return invite_code

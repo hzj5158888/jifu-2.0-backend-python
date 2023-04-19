@@ -9,6 +9,7 @@ from common.api.common_result import R
 from common.models.power_user_info import PowerUserInfo
 from common.models.campus_member import CampusMember
 from common.enums.status_enum import StatusEnum
+from common.models.admin import Admin
 
 
 class JwtUtil:
@@ -30,6 +31,9 @@ class JwtUtil:
         info_claim["is_member"] = StatusEnum.OPEN.value if member_info else StatusEnum.CLOSE.value
         member_id = member_info.id if member_info else None
         member_status = member_info.status if member_info else StatusEnum.CLOSE.value
+        
+        admin_info = Admin.query.filter_by(member_id = member_id).first()
+        is_admin = StatusEnum.OPEN.value if admin_info else StatusEnum.CLOSE.value
 
         access_token = create_access_token(identity=user_id, additional_claims=info_claim)
         
@@ -40,5 +44,6 @@ class JwtUtil:
                              user_id=user_id,
                              member_id=member_id,
                              is_member=info_claim["is_member"],
-                             member_status=member_status)
+                             member_status=member_status,
+                             is_admin = is_admin)
 

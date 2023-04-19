@@ -85,8 +85,9 @@ def init_invite_code_gz():
     
 def init_administrator_gz():
     admin = Admin()
-    admin.password = 'admin'
+    admin.invite_code = 'admin'
     admin.campus_id = 1
+    admin.member_id = 0
     db.session.add(admin)
     db.session.commit()
     
