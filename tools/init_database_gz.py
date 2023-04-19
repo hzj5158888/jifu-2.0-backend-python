@@ -6,10 +6,12 @@ from common.models.invite_code import InviteCode
 from common.models.campus_system_info import CampusSystemInfo
 from common.models.admin import Admin
 
+gz_campus_id = 1
+
 def init_campus_info_gz():
     # 大学城
     campus_info = CampusInfo()
-    campus_info.id = 1
+    campus_info.id = gz_campus_id
     campus_info.name = '大学城校区'
     campus_info.img_url = 'https://www.gdpu.edu.cn/__local/0/E5/14/6DC0A17590A81A3F84E7F05D36E_E625EFC6_1504B.jpg'
     campus_info.introduction = '广东药科大学广州校区大学城校园'
@@ -32,7 +34,7 @@ def init_campus_dept_info_gz():
     
     for name in name_list:
         campus_dept_info = CampusDeptInfo()
-        campus_dept_info.campus_id = 1 # 大学城
+        campus_dept_info.campus_id = gz_campus_id # 大学城
         campus_dept_info.name = name
         campus_dept_info.full_name = "计服" + name
         campus_dept_info.remark = 'null'
@@ -51,7 +53,7 @@ def init_campus_carousel_gz():
     
     for url in url_list:
         campus_carousel = CampusCarousel()
-        campus_carousel.campus_id = 1 # 大学城
+        campus_carousel.campus_id = gz_campus_id # 大学城
         campus_carousel.url = url
         db.session.add(campus_carousel)
     
@@ -62,7 +64,7 @@ def init_campus_system_info_gz():
     # 大学城
     
     campus_system_info = CampusSystemInfo()
-    campus_system_info.campus_id = 1
+    campus_system_info.campus_id = gz_campus_id
     campus_system_info.report_status = 1
     campus_system_info.report_content = '服务已下线'
     campus_system_info.apply_status = 1
@@ -76,12 +78,12 @@ def init_campus_system_info_gz():
     
 
 def init_invite_code_gz():
-    dept_list = CampusDeptInfo.query.filter_by(campus_id = 1).all()
+    dept_list = CampusDeptInfo.query.filter_by(campus_id = gz_campus_id).all()
     
     for dept in dept_list:
         invite_code = InviteCode()
         invite_code.code = '123456789'
-        invite_code.campus_id = 1
+        invite_code.campus_id = gz_campus_id
         invite_code.dept_id = dept.id
         db.session.add(invite_code)
 
@@ -89,12 +91,12 @@ def init_invite_code_gz():
     
     
 def init_administrator_gz():
-    dept_list = CampusDeptInfo.query.filter_by(campus_id = 1).all()
+    dept_list = CampusDeptInfo.query.filter_by(campus_id = gz_campus_id).all()
     
     for dept in dept_list:
         admin = Admin()
         admin.invite_code = 'admin'
-        admin.campus_id = 1
+        admin.campus_id = gz_campus_id
         admin.dept_id = dept.id
         admin.member_id = 0
         db.session.add(admin)
