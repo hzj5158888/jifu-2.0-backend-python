@@ -89,7 +89,8 @@ def addMemberInfo(user_id):
     db.session.add(member_info)
     db.session.commit()
 
-    return R.success("注册成功，等待审核")
+    return R.successData(member_id = member_info.id,
+                         member_status = member_info.status)
 
 
 @member_api.route("/<int:member_id>/modifyinfo", methods=['PUT'])
@@ -131,7 +132,7 @@ def updateMemberInfo(member_id):
     db.session.add(member_info)
     db.session.commit()
 
-    return R.success("修改成功，等待审核")
+    return R.successData(member_status = member_info.status)
 
 
 @member_api.route("/<int:member_id>/del", methods=['PUT'])
