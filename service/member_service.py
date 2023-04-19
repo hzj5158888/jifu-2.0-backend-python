@@ -6,6 +6,7 @@
 """
 from datetime import datetime
 
+from common.models.admin import Admin
 from common.models.campus_member import CampusMember
 from common.models.campus_member_merits_record import CampusMemberMeritsRecord
 from common.enums.merits_record_operator_type_enum import MeritsOperatorTypeEnum
@@ -67,6 +68,8 @@ class MemberService:
         else:
             is_tenure = True
 
+        admin_info = Admin.query.filter_by(member_id = member_id).first()
+        is_admin = 0 if not admin_info else 1
         info_dict = {
             "name": member_info.name,
             "campus": member_info.campus.name,
@@ -75,6 +78,7 @@ class MemberService:
             "position": member_info.position,
             "merits": float(member_info.merits),
             "status": member_info.status,
+            "is_admin": is_admin,
             "start_time": member_info.start_time.timestamp(),
             "end_time": member_info.end_time.timestamp()
         }

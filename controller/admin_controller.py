@@ -121,7 +121,7 @@ def getMemberDetail(member_id):
     
     return R.successData(MemberService.member_to_detail(member_id))
 
-@admin_api.route("/member/info/modify/<int:member_id>", methods=['POST'])
+@admin_api.route("/member/info/modify/<int:member_id>", methods=['PUT'])
 @jwt_required()
 def modifyinfo(member_id):
     """
