@@ -33,11 +33,12 @@ def adminSignup():
     member_id = req.get('member_id')
     invite_code = req.get('invite_code')
     
-    admin_info = Admin.query.filter_by(invite_code = invite_code).first()
+    member_dept = CampusMember.query.filter_by(id = member_id).first().dept_id
+    admin_info = Admin.query.filter_by(invite_code = invite_code, dept_id = member_dept).first()
     if not admin_info:
         return R.failedMsg("邀请码不存在或已失效")
     
-    if (admin_info.count > 0):
+    if (admin_info.invite_count > 0):
         admin_info.invite_count = admin_info.invite_count - 1
     else:
         admin_info.invite_code = ''
@@ -50,7 +51,11 @@ def adminSignup():
     new_admin = Admin()
     new_admin.campus_id = CampusMember.query.filter_by(id = member_id).first().campus_id
     new_admin.member_id = member_id
-    new_admin.invite_code = Helper.randomStr(9)
+    new_admin.dept_id = member_dept
+    while True:
+        new_admin.invite_code = Helper.randomStr(9)
+        if not Admin.query.filter_by(invite_code = new_admin.invite_code).first():
+            break
     db.session.add(new_admin)
     
     db.session.commit()
@@ -150,8 +155,9 @@ def getInviteCode(admin_member_id):
     if not admin_info:
         return R.failedMsg("该成员不是管理员")
     
+    admin_dept_id = admin_info.dept_id
     admin_campus_id = admin_info.campus_id
-    invite_code = InviteCode.query.filter_by(campus_id = admin_campus_id).first()
+    invite_code = InviteCode.query.filter_by(campus_id = admin_campus_id, dept_id = admin_dept_id).first()
     if not invite_code:
         return R.failedMsg("邀请码不存在")
     
@@ -169,14 +175,20 @@ def refreshInviteCode(admin_member_id):
     if not admin_info:
         return R.failedMsg("该成员不是管理员")
     
-    admin_campus_id = Admin.query.filter_by(member_id = admin_member_id).first().campus_id
-    invite_code = InviteCode.query.filter_by(campus_id = admin_campus_id).first()
-    if not invite_code:
-        invite_code = InviteCode()
-        invite_code.campus_id = admin_campus_id
+    admin_dept_id = admin_info.dept_id
+    admin_campus_id = admin_info.campus_id
+    invite_code_info = InviteCode.query.filter_by(campus_id = admin_campus_id, dept_id = admin_dept_id).first()
+    if not invite_code_info:
+        invite_code_info = InviteCode()
+        invite_code_info.campus_id = admin_campus_id
+        invite_code_info.dept_id = admin_dept_id
     
-    invite_code.code = Helper.randomStr(9)
-    db.session.add(invite_code)
+    while True:
+        invite_code = Helper.randomStr(9)
+        if not InviteCode.query.filter_by(code = invite_code).first():
+            invite_code_info.code = invite_code
+            break
+    db.session.add(invite_code_info)
     db.session.commit()
     
-    return R.successData(invite_code = invite_code.code)
+    return R.successData(invite_code = invite_code_info.code)

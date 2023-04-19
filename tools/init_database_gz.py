@@ -76,19 +76,29 @@ def init_campus_system_info_gz():
     
 
 def init_invite_code_gz():
-    invite_code = InviteCode()
-    invite_code.code = '123456789'
-    invite_code.campus_id = 1
-    db.session.add(invite_code)
+    dept_list = CampusDeptInfo.query.filter_by(campus_id = 1).all()
+    
+    for dept in dept_list:
+        invite_code = InviteCode()
+        invite_code.code = '123456789'
+        invite_code.campus_id = 1
+        invite_code.dept_id = dept.id
+        db.session.add(invite_code)
+
     db.session.commit()
     
     
 def init_administrator_gz():
-    admin = Admin()
-    admin.invite_code = 'admin'
-    admin.campus_id = 1
-    admin.member_id = 0
-    db.session.add(admin)
+    dept_list = CampusDeptInfo.query.filter_by(campus_id = 1).all()
+    
+    for dept in dept_list:
+        admin = Admin()
+        admin.invite_code = 'admin'
+        admin.campus_id = 1
+        admin.dept_id = dept.id
+        admin.member_id = 0
+        db.session.add(admin)
+
     db.session.commit()
     
     

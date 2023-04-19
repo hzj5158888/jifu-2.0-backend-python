@@ -20,6 +20,7 @@ from common.models.report_group import ReportGroup
 from common.models.invite_code import InviteCode
 from common.models.power_user_info import PowerUserInfo
 from common.models.campus_member_merits_record import CampusMemberMeritsRecord
+from common.models.admin import Admin
 from application_initializer import db
 from common.enums.report_status_enum import ReportStatus
 from common.enums.group_member_type_enum import GroupMemberEnum
@@ -61,14 +62,18 @@ def addMemberInfo(user_id):
     class_name = req.get("class_name")
     invite_code = req.get("invite_code")
     
-    if invite_code is None:
-        return R.failedMsg("邀请码为空")
-    elif invite_code != InviteCode.query.filter_by(campus_id = campus_id).first().code:
-        return R.failedMsg("邀请码错误")
-
     user_info = PowerUserInfo.query.filter_by(id=user_id).first()
     if not user_info:
         return R.failedMsg("找不到用户")
+    
+    dept_info = CampusDeptInfo.query.filter_by(campus_id = campus_id, name = dept_name).first()
+    if not dept_info:
+        return R.failedMsg("无效的部门名称")
+    
+    if invite_code is None:
+        return R.failedMsg("邀请码为空")
+    elif invite_code != InviteCode.query.filter_by(campus_id = campus_id, dept_id = dept_info.id).first().code:
+        return R.failedMsg("邀请码错误")
     
     if CampusMember.query.filter_by(user_id = user_id).first() is not None:
         return R.failedMsg("成员账户已存在")
@@ -82,7 +87,7 @@ def addMemberInfo(user_id):
     member_info.class_name = class_name
     member_info.merits = 0
     member_info.position = "小干"
-    member_info.status = 0
+    member_info.status = 1 if not Admin.query.filter(Admin.campus_id == campus_id, Admin.dept_id == dept_info.id, Admin.member_id > 0).first() else 0
     member_info.start_time = datetime.datetime.now()
     member_info.end_time = member_info.start_time + datetime.timedelta(days = 2 * 365)
     
