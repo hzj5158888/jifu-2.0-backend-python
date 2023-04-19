@@ -29,9 +29,8 @@ pip install -r requirements.txt
 config.py
 
 ### 数据库配置
-1.  在./config/profile_config.py中设置好数据库服务器地址、用户名、密码
-2.  数据库配置
-        cd 当前目录下，执行'./configure.py resetdb initdb'
+1.  在./config/profile_config.py中设置好数据库服务器的地址、用户名(默认root、建议默认)、密码(默认为空)。修改密码请参考：https://blog.csdn.net/qq_40757240/article/details/118068317
+2.  cd 当前目录下，执行'./configure.py resetdb initdb'
 
 #### 输出依赖文件
 `pip3 install pipreqs`
