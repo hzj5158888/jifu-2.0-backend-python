@@ -16,7 +16,6 @@ def create_router(application):
     from controller.admin_controller import admin_api
     from controller.member_controller import member_api
     from controller.feedback_controller import feedback_api
-    from controller.test_controller import test_api
 
     """
     统一创建路由文件
@@ -30,5 +29,4 @@ def create_router(application):
     application.register_blueprint(admin_api, url_prefix="/admin")
     application.register_blueprint(member_api, url_prefix="/member")
     application.register_blueprint(feedback_api, url_prefix="/feedback")
-    application.register_blueprint(test_api, url_prefix="/test")
 
