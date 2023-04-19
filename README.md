@@ -29,8 +29,12 @@ pip install -r requirements.txt
 config.py
 
 ### 数据库配置
-1.  在./config/profile_config.py中设置好数据库服务器的地址、用户名(默认root、建议默认)、密码(默认为空)。修改密码请参考：https://blog.csdn.net/qq_40757240/article/details/118068317
-2.  cd 当前目录下，执行'./configure.py resetdb initdb'
+0.  注意当前的模式是开发模式还是生成环境，两者要配置的位置不一样
+1.  数据库的地址定义在./config/profile_config.py中的SQLALCHEMY_DATABASE_URI,格式是：协议+用户名:密码@主机IP/数据库名称
+2.  设置好数据库服务器的地址、用户名(默认root、建议默认)、密码(默认为空)。
+    * 修改密码请参考：https://blog.csdn.net/qq_40757240/article/details/118068317
+3.  配置数据库。连接到数据库服务器，输入命令：'create database gdpujf_dev/gdpujf-prod(也可以换成你想要的名称)'创建数据库，然后在profile_config.py中配置好数据库名
+4.  cd 当前目录下，执行'./configure.py resetdb initdb'
 
 #### 输出依赖文件
 `pip3 install pipreqs`
