@@ -16,31 +16,6 @@ from service.member_service import MemberService
 
 admin_api = Blueprint("admin", __name__)
 
-@admin_api.route("/<int:campus_id>/login", methods=['POST'])
-def admin_login(campus_id):
-    """
-    管理员登陆
-    @return: token
-    """
-    info = Admin.query.filter_by(campus_id = campus_id).first()
-    data = request.form
-    
-    pwd = data.get("password")
-    if pwd != info.password:
-        return R.validateFailedMsg('用户名或者密码错误')
-
-    """
-        a: 97
-        d: 100
-        m: 109
-        i: 105
-        n: 110
-        
-        admin: 97100109105110
-    """
-    return JwtUtil.generate_token(97100109105110)
-
-
 @admin_api.route("/<int:campus_id>/member/info/get", methods=['GET'], strict_slashes=False)
 @jwt_required()
 def getAllMemberInfo(campus_id):
