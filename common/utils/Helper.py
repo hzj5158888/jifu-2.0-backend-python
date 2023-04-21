@@ -25,7 +25,7 @@ def getCurrentDate(formatted="%Y-%m-%d %H:%M:%S"):
 def randomStr(len):
     digits = '0123456789'
     ascii_letters = 'abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    invite_code_list = [random.choice(digits + ascii_letters) for i in range(len)]
-    invite_code = ''.join(invite_code_list)
+    str_list = [random.choice(digits + ascii_letters) for i in range(len)]
+    res = ''.join(str_list)
     
-    return invite_code
+    return res
