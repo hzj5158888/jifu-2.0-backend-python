@@ -86,7 +86,7 @@ def getAdminCode(admin_member_id):
 @jwt_required()
 def getAllMemberInfo(admin_member_id):
     """
-    校区部门全部成员获取
+    校区部门成员列表获取
     @param admin_member_id: 管理员的成员id
     :param page_size: 页大小(default:15)
     :param page_num: 页码(default:1)
@@ -114,9 +114,9 @@ def getAllMemberInfo(admin_member_id):
 @jwt_required()
 def getMemberDetail(member_id):
     """
-    校区部门全部成员资料获取
-    @param admin_member_id: 管理员的成员id
-    @return: 成员资料数组
+    校区部门某成员资料获取
+    @param member_id: 成员的id
+    @return: 成员资料
     """
     
     return R.successData(MemberService.member_to_detail(member_id))
@@ -126,7 +126,6 @@ def getMemberDetail(member_id):
 def modifyinfo(member_id):
     """
     成员资料修改函数
-    @param admin_member_id: 管理员的成员id
     @param member_id: 被修改成员的id
     """
     req = request.get_json()
