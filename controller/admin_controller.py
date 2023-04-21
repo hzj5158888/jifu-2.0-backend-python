@@ -33,8 +33,8 @@ def adminSignup():
     member_id = req.get('member_id')
     invite_code = req.get('invite_code')
     
-    member_dept = CampusMember.query.filter_by(id = member_id).first().dept_id
-    admin_info = Admin.query.filter_by(invite_code = invite_code, dept_id = member_dept).first()
+    member_info = CampusMember.query.filter_by(id = member_id).first()
+    admin_info = Admin.query.filter_by(invite_code = invite_code, dept_id = member_info.dept_id, campus_id = member_info.campus_id).first()
     if not admin_info:
         return R.failedMsg("邀请码错误或已失效")
     
@@ -49,12 +49,12 @@ def adminSignup():
     db.session.add(admin_info)
     
     new_admin = Admin()
-    new_admin.campus_id = CampusMember.query.filter_by(id = member_id).first().campus_id
+    new_admin.campus_id = member_info.campus_id
     new_admin.member_id = member_id
-    new_admin.dept_id = member_dept
+    new_admin.dept_id = member_info.dept_id
     while True:
         new_admin.invite_code = Helper.randomStr(9)
-        if not Admin.query.filter_by(invite_code = new_admin.invite_code).first():
+        if not Admin.query.filter_by(invite_code = new_admin.invite_code, dept_id = member_info.dept_id, campus_id = member_info.campus_id).first():
             break
     db.session.add(new_admin)
     
@@ -76,7 +76,12 @@ def getAdminCode(admin_member_id):
     if admin_info.invite_count == 0:
         return R.failedMsg("管理员邀请机会已用完")
     
-    admin_info.invite_code = Helper.randomStr(9)
+    while True:
+        invite_code = Helper.randomStr(9)
+        if not Admin.query.filter_by(invite_code = invite_code, campus_id = admin_info.campus_id, dept_id = admin_info.dept_id).first():
+            admin_info.invite_code = invite_code
+            break
+    
     db.session.add(admin_info)
     db.session.commit()
     
@@ -184,7 +189,7 @@ def refreshInviteCode(admin_member_id):
     
     while True:
         invite_code = Helper.randomStr(9)
-        if not InviteCode.query.filter_by(code = invite_code).first():
+        if not InviteCode.query.filter_by(code = invite_code, campus_id = admin_campus_id, dept_id = admin_dept_id).first():
             invite_code_info.code = invite_code
             break
     db.session.add(invite_code_info)
