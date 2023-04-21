@@ -98,6 +98,7 @@ def init_administrator_zs():
         admin.invite_code = 'admin'
         admin.campus_id = zs_campus_id
         admin.dept_id = dept.id
+        admin.invite_count = 1
         admin.member_id = 0
         db.session.add(admin)
 
