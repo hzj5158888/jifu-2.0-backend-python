@@ -34,7 +34,7 @@ config.py
 2.  设置好数据库服务器的地址、用户名(默认root、建议默认)、密码(默认为空)。
     * 修改密码请参考：https://blog.csdn.net/qq_40757240/article/details/118068317
 3.  配置数据库。连接到数据库服务器，输入命令：'create database gdpujf_dev/gdpujf-prod(也可以换成你想要的名称)'创建数据库，然后在profile_config.py中配置好数据库名
-4.  cd 当前目录下，执行'./configure.py resetdb initdb'
+4.  cd 当前目录下，执行'./configure.py develop resetdb initdb' (开发环境)，或'./configure.py product resetdb initdb'(生产环境)
 
 #### 输出依赖文件
 `pip3 install pipreqs`

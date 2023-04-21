@@ -3,10 +3,15 @@ import tools.init_database as InitDataBase
 
 from application_initializer import create_application, db
 
-# 创建flask的应用对象
-app = create_application("develop")
-
 if __name__ == '__main__':
+    if 'develop' in sys.argv:
+        app = create_application("develop")
+    elif 'product' in sys.argv:
+        app = create_application('product')
+    else:
+        print("请指定配置模式：开发环境/生成环境(develop/product)")
+        sys.exit()
+    
     if 'createdb' in sys.argv and 'resetdb' not in sys.argv:
         with app.app_context():
             db.create_all()
