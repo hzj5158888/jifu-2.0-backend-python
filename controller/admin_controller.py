@@ -36,7 +36,7 @@ def adminSignup():
     member_dept = CampusMember.query.filter_by(id = member_id).first().dept_id
     admin_info = Admin.query.filter_by(invite_code = invite_code, dept_id = member_dept).first()
     if not admin_info:
-        return R.failedMsg("邀请码不存在或已失效")
+        return R.failedMsg("邀请码错误或已失效")
     
     if (admin_info.invite_count > 0):
         admin_info.invite_count = admin_info.invite_count - 1
