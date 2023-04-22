@@ -19,6 +19,7 @@ from common.models.campus_member import CampusMember
 from common.models.report_group import ReportGroup
 from common.models.invite_code import InviteCode
 from common.models.power_user_info import PowerUserInfo
+from common.models.campus_info import CampusInfo
 from common.models.campus_member_merits_record import CampusMemberMeritsRecord
 from common.models.admin import Admin
 from application_initializer import db
@@ -117,22 +118,28 @@ def updateMemberInfo(member_id):
     @return:
     """
     req = request.get_json()
-    real_name = req.get("real_name")
-    phone = req.get("phone")
-    campus_id = req.get("campus_id")
-    dept_id = req.get("dept_id")
-    class_name = req.get("class_name")
     
     member_info = CampusMember.query.filter_by(id = member_id).first()
     if not member_info:
         return R.failedMsg("该用户不是成员")
     
-    member_info.campus_id = campus_id
-    member_info.dept_id = dept_id
-    member_info.name = real_name
-    member_info.phone = phone
-    member_info.class_name = class_name
-    member_info.status = 0
+    key_list = ['campus', 'dept', 'name', 'class', 'phone']
+    for (key, value) in req.items():
+        if key not in key_list:
+            continue
+        elif key == 'campus':
+            new_campus_id = CampusInfo.query.filter_by(name = value).first().id
+            dept_name = CampusDeptInfo.query.filter_by(id = member_info.dept_id)
+            member_info.campus_id = new_campus_id
+            member_info.dept_id = CampusDeptInfo.query.filter_by(campus_id = new_campus_id, name = dept_name)
+            member_info.status = 0
+        elif key == 'dept':
+            campus_id = member_info.campus_id
+            new_dept_id = CampusDeptInfo.query.filter_by(campus_id = campus_id, name = value).first().id
+            member_info.dept_id = new_dept_id
+            member_info.status = 0
+        else:
+            exec('member_info.' + key + '=' + 'value')
     
     db.session.add(member_info)
     db.session.commit()

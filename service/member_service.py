@@ -79,6 +79,8 @@ class MemberService:
             "merits": float(member_info.merits),
             "status": member_info.status,
             "is_admin": is_admin,
+            "class": member_info.class_name,
+            "phone": member_info.phone,
             "start_time": member_info.start_time.timestamp(),
             "end_time": member_info.end_time.timestamp()
         }
