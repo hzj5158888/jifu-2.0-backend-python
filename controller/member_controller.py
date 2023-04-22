@@ -166,6 +166,10 @@ def memberGetInfo(member_id):
     :param member_id: 职员id
     :return: 职员的个人信息
     """
+    member_info = CampusMember.query.filter_by(id=member_id).first()
+    if not member_info or member_info.status == 0:
+        return R.validateFailedMsg("无效职员")
+    
     return MemberService.member_to_detail(member_id)
 
 
@@ -179,6 +183,10 @@ def memberGerMeritsLogs(member_id):
     :param page_num: 页码(default:1)
     :return: 职员的绩效记录
     """
+    member_info = CampusMember.query.filter_by(id=member_id).first()
+    if not member_info or member_info.status == 0:
+        return R.validateFailedMsg("无效职员")
+    
     req = request.args
     page_size = int(req['page_size']) if ('page_size' in req and req['page_size']) else 15
     page_num = int(req['page_num']) if ('page_num' in req and req['page_num']) else 1
@@ -329,6 +337,10 @@ def campusUserCheckReceivedReport(member_id):
 
     page_size = int(req['page_size']) if ('page_size' in req and req['page_size']) else 15
     page_num = int(req['page_num']) if ('page_num' in req and req['page_num']) else 1
+    
+    member_info = CampusMember.query.filter_by(id=member_id).first()
+    if not member_info or member_info.status == 0:
+        return R.validateFailedMsg("无效职员")
 
     groups = ReportGroup.query.filter_by(member_id=member_id).all()
     all_report_ids = [group.report_id for group in groups]
