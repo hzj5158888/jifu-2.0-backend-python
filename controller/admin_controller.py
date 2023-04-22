@@ -127,6 +127,24 @@ def getMemberDetail(member_id):
     
     return R.successData(MemberService.member_to_detail(member_id))
 
+@admin_api.route("/member/del/<int:member_id>", methods=['PUT'])
+@jwt_required()
+def delMember(member_id):
+    """
+    删除成员
+    @param member_id 成员id
+    @return:
+    """
+    
+    member_info = CampusMember.query.filter_by(id = member_id).first()
+    if not member_info:
+        return R.failedMsg("该用户不是成员")
+    
+    db.session.delete(member_info)
+    db.session.commit()
+    
+    return R.success()
+
 @admin_api.route("/member/info/modify/<int:member_id>", methods=['PUT'])
 @jwt_required()
 def modifyinfo(member_id):
