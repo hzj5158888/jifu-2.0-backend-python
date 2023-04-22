@@ -13,6 +13,7 @@ from common.api.common_result import R
 from common.models.admin import Admin
 from common.models.campus_member import CampusMember
 from common.models.invite_code import InviteCode
+from common.models.campus_info import CampusInfo
 from common.models.campus_dept_info import CampusDeptInfo
 from common.api.common_page import CommonPage
 
@@ -133,19 +134,35 @@ def modifyinfo(member_id):
     成员资料修改函数
     @param member_id: 被修改成员的id
     """
-    req = request.get_json()
-    
-    status = req.get('status')
+    req_dict = request.get_json()
     
     member_info = CampusMember.query.filter_by(id = member_id).first()
     if not member_info:
         return R.failedMsg("找不到用户")
-    
-    member_info.status = status
+
+    key_list = ['campus', 'dept', 'name', 'position', 'end_time', 'status']
+    for (key, value) in req_dict.items():
+        if key not in key_list:
+            continue
+        elif key == 'campus':
+            new_campus_id = CampusInfo.query.filter_by(name = value).first().id
+            dept_name = CampusDeptInfo.query.filter_by(id = member_info.dept_id)
+            member_info.campus_id = new_campus_id
+            member_info.dept_id = CampusDeptInfo.query.filter_by(campus_id = new_campus_id, name = dept_name)
+        elif key == 'dept':
+            campus_id = member_info.campus_id
+            new_dept_id = CampusDeptInfo.query.filter_by(campus_id = campus_id, name = value).first().id
+            member_info.dept_id = new_dept_id
+        else:
+            if key == 'end_time':
+                value = datetime.datetime.strptime(value, '%Y-%m-%d %H:%M')
+            
+            exec('member_info.' + key + '=' + 'value')
+            
     db.session.add(member_info)
     db.session.commit()
     
-    return R.success()
+    return R.successData(member_status = member_info.status)
 
 @admin_api.route("/<int:admin_member_id>/invitecode/get", methods=['GET'])
 @jwt_required()
