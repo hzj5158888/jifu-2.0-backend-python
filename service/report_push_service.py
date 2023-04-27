@@ -32,15 +32,15 @@ class ReportPushService:
         report_info = ReportInfo.query.filter_by(id = report_id).first()
         
         campus_name = CampusInfo.query.filter_by(id = report_info.campus_id).first().name
-        type_name = ReportTypes.get_type_name(report_info.type) + "报障"
+        type_name = ReportTypes.get_type_name(report_info.type)
         status_name = ReportStatus.MAP.value[report_info.status]
         report_info_dict = {
+            '状态' : status_name + '-第' + str(report_info.id) + '号',
+            '类型' : campus_name + type_name  + "报障",
             '姓名' : report_info.name,
-            '类型' : type_name,
             '电话' : report_info.phone,
             '地址' : report_info.address,
-            '故障描述' : report_info.description,
-            '状态' : status_name
+            '故障描述' : report_info.description
         }
         
         report_info_str = ""
